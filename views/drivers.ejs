@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Form Submission</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <form id="driverForm">
+      <div class="form-group">
+        <label for="type">Yo'nalish</label>
+        <select class="form-control" id="type" name="type">
+          <option value="exam">Imtihonga Tayyorlanish</option>
+          <option value="learn">Haydashni O'rganish</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="category">Kategoriya</label>
+        <select class="form-control" id="category" name="category">
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="male">Jinsi</label>
+        <select class="form-control" id="male" name="male">
+          <option value="Ayol">Ayol</option>
+          <option value="Erkak">Erkak</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="staj">Staj</label>
+        <input type="number" class="form-control" id="staj" name="staj" required>
+      </div>
+      <div class="form-group">
+        <label for="fullName">To'liq Ism Familiya</label>
+        <input type="text" class="form-control" id="fullName" name="fullName" required>
+      </div>
+      <div class="form-group">
+        <label for="someDetails">Qo'shimcha</label>
+        <textarea class="form-control" id="someDetails" name="someDetails" rows="3" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+  <div class="container mt-5">
+    <form id="driverForm">
+      <!-- Your form inputs here -->
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Yo'nalish</th>
+            <th>Kategoriya</th>
+            <th>Jinsi</th>
+            <th>Staj</th>
+            <th>To'liq Ism Familiya</th>
+            <th>Qo'shimcha</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% drivers.forEach(function(driver, index) { %>
+            <tr data-index="<%= index %>">
+              <td>
+                <%= driver.type %>
+              </td>
+              <td>
+                <%= driver.category %>
+              </td>
+              <td>
+                <%= driver.male %>
+              </td>
+              <td>
+                <%= driver.staj %>
+              </td>
+              <td>
+                <%= driver.fullName %>
+              </td>
+              <td>
+                <%= driver.someDetails %>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger btn-sm"
+                  onclick="deleteDriver('<%= driver._id %>')">O'chirish</button>
+              </td>
+            </tr>
+            <% }); %>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $("#driverForm").submit(function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        var formData = {
+          type: $("#type").val(),
+          category: $("#category").val(),
+          male: $("#male").val(),
+          staj: $("#staj").val(),
+          fullName: $("#fullName").val(),
+          someDetails: $("#someDetails").val()
+        };
+
+        $(':input[type="submit"]').prop('disabled', false);
+
+        $.ajax({
+          type: "POST",
+          url: "/drivers",
+          data: JSON.stringify(formData),
+          contentType: "application/json",
+          success: function (response) {
+            window.location.reload()
+          },
+          error: function () {
+            alert("An error occurred");
+          }
+        });
+      });
+    });
+
+    const deleteDriver = async (_id) => {
+      $.ajax({
+        type: "DELETE",
+        url: `/drivers/${_id}`,
+        contentType: "application/json",
+        success: function (response) {
+          window.location.reload()
+        },
+        error: function () {
+          alert("An error occurred");
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>

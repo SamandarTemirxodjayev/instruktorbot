@@ -45,7 +45,7 @@ const columns = [
 ];
 
 onMounted(async () => {
-  drivers.value = await $fetch("http://172.17.77.253:3001/drivers", {
+  drivers.value = await $fetch("http://79.133.181.82:3001/drivers", {
     method: "GET",
   });
   pageConfig.isLoading = false;

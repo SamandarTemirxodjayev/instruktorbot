@@ -11,7 +11,8 @@ bot.on('message', async (msg) => {
   const msgText = msg.text;
 
 
-  const member = await bot.getChatMember("-1002065877986", chatId);
+  try {
+    const member = await bot.getChatMember("-1002065877986", chatId);
   if (member.status != 'member' && member.status != 'administrator' && member.status != 'creator') {
     return bot.sendMessage(chatId, "<b>🇺🇿 Botdan Foydalanish uchun bizning guruhimizga a'zo boling\n\n🇷🇺 Перед использованием этого бота подпишитесь на группу</b>", {
       reply_markup: {
@@ -23,6 +24,9 @@ bot.on('message', async (msg) => {
       },
       parse_mode: "HTML"
     });
+  }
+  } catch (error) {
+      console.log(error)
   }
 
   const user = await Users.findOne({
@@ -86,8 +90,9 @@ bot.on("callback_query", async(msg) => {
   if(msgText == "check_subs"){
     await bot.deleteMessage(chatId, msgId)
     const member = await bot.getChatMember("-1002065877986", chatId);
+    console.log(msg);
     if (member.status != 'member' && member.status != 'administrator' && member.status != 'creator') {
-      return bot.sendMessage(chatId, "<b>🇺🇿 Botdan Foydalanish uchun bizning guruhimizga a'zo boling\n\n🇷🇺 Перед использованием этого бота подпишитесь на группу</b>", {
+      return bot.sendMessage(msg.from.id, "<b>🇺🇿 Botdan Foydalanish uchun bizning guruhimizga a'zo boling\n\n🇷🇺 Перед использованием этого бота подпишитесь на группу</b>", {
         reply_markup: {
           inline_keyboard: [
             [{text: "Guruhimiz/Gruppa", url: "https://t.me/+79Tv0P3jbNo3NTAy"}],
@@ -165,5 +170,6 @@ bot.on("callback_query", async(msg) => {
     
   }
 });
+
 
 console.log("Bot is connected", "done");

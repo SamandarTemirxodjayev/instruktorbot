@@ -23,7 +23,7 @@ const driverSchema = new Schema({
   },
   someDetails: {
     type: String
-  }
+  },
 });
 
 driverSchema.set("timestamps", true);
